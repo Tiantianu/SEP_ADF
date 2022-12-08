@@ -1,0 +1,9 @@
+{
+	"name": "sep-adf",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "37f206e1-456b-4851-9285-75da60dd9afe",
+		"tenantId": "f6103fbe-d45f-42fc-b9c9-fb3a0d7929c8"
+	}
+}
