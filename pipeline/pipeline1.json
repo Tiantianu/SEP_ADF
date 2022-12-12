@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "wwiODS",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -20,11 +20,190 @@
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
-					"enableStaging": false
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "\n",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"tableOption": "autoCreate",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "OrderID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "OrderID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "CustomerID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "CustomerID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "SalespersonPersonID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "SalespersonPersonID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "PickedByPersonID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "PickedByPersonID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "ContactPersonID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "ContactPersonID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "BackorderOrderID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "BackorderOrderID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "OrderDate",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "OrderDate",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ExpectedDeliveryDate",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "ExpectedDeliveryDate",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "CustomerPurchaseOrderNumber",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CustomerPurchaseOrderNumber",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "IsUndersupplyBackordered",
+									"type": "Boolean"
+								},
+								"sink": {
+									"name": "IsUndersupplyBackordered",
+									"type": "Boolean"
+								}
+							},
+							{
+								"source": {
+									"name": "Comments",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Comments",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DeliveryInstructions",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DeliveryInstructions",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "InternalComments",
+									"type": "String"
+								},
+								"sink": {
+									"name": "InternalComments",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PickingCompletedWhen",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "PickingCompletedWhen",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "LastEditedBy",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "LastEditedBy",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "LastEditedWhen",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "LastEditedWhen",
+									"type": "DateTime"
+								}
+							}
+						]
+					}
 				},
 				"inputs": [
 					{
-						"referenceName": "AzureSqlTable1",
+						"referenceName": "wwiorders",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "wwiorders",
 						"type": "DatasetReference"
 					}
 				]
