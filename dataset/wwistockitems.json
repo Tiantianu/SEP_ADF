@@ -1,0 +1,135 @@
+{
+	"name": "wwistockitems",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase3",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "StockItemID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "StockItemName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SupplierID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ColorID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "UnitPackageID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "OuterPackageID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Brand",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Size",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LeadTimeDays",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "QuantityPerOuter",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "IsChillerStock",
+				"type": "bit"
+			},
+			{
+				"name": "Barcode",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TaxRate",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 3
+			},
+			{
+				"name": "UnitPrice",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 2
+			},
+			{
+				"name": "RecommendedRetailPrice",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 2
+			},
+			{
+				"name": "TypicalWeightPerUnit",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 3
+			},
+			{
+				"name": "MarketingComments",
+				"type": "nvarchar"
+			},
+			{
+				"name": "InternalComments",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Photo",
+				"type": "varbinary"
+			},
+			{
+				"name": "CustomFields",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Tags",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SearchDetails",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LastEditedBy",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ValidFrom",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "ValidTo",
+				"type": "datetime2",
+				"scale": 7
+			}
+		],
+		"typeProperties": {
+			"schema": "Warehouse",
+			"table": "StockItems"
+		}
+	}
+}

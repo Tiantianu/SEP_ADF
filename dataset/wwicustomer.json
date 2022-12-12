@@ -1,0 +1,158 @@
+{
+	"name": "wwicustomer",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase3",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "CustomerID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CustomerName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "BillToCustomerID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CustomerCategoryID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "BuyingGroupID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "PrimaryContactPersonID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "AlternateContactPersonID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DeliveryMethodID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DeliveryCityID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "PostalCityID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CreditLimit",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 2
+			},
+			{
+				"name": "AccountOpenedDate",
+				"type": "date"
+			},
+			{
+				"name": "StandardDiscountPercentage",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 3
+			},
+			{
+				"name": "IsStatementSent",
+				"type": "bit"
+			},
+			{
+				"name": "IsOnCreditHold",
+				"type": "bit"
+			},
+			{
+				"name": "PaymentDays",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "PhoneNumber",
+				"type": "nvarchar"
+			},
+			{
+				"name": "FaxNumber",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DeliveryRun",
+				"type": "nvarchar"
+			},
+			{
+				"name": "RunPosition",
+				"type": "nvarchar"
+			},
+			{
+				"name": "WebsiteURL",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DeliveryAddressLine1",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DeliveryAddressLine2",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DeliveryPostalCode",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DeliveryLocation",
+				"type": "geography"
+			},
+			{
+				"name": "PostalAddressLine1",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PostalAddressLine2",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PostalPostalCode",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LastEditedBy",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ValidFrom",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "ValidTo",
+				"type": "datetime2",
+				"scale": 7
+			}
+		],
+		"typeProperties": {
+			"schema": "Sales",
+			"table": "Customers"
+		}
+	}
+}
