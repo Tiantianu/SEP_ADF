@@ -21,12 +21,15 @@
 						"partitionOption": "None"
 					},
 					"sink": {
-						"type": "AzureSqlSink",
-						"preCopyScript": "\n",
-						"writeBehavior": "insert",
-						"sqlWriterUseTableLock": false,
-						"tableOption": "autoCreate",
-						"disableMetricsCollection": false
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".JSON"
+						}
 					},
 					"enableStaging": false,
 					"translator": {
@@ -38,8 +41,8 @@
 									"type": "Int32"
 								},
 								"sink": {
-									"name": "OrderID",
-									"type": "Int32"
+									"type": "Int32",
+									"ordinal": 1
 								}
 							},
 							{
@@ -48,8 +51,8 @@
 									"type": "Int32"
 								},
 								"sink": {
-									"name": "CustomerID",
-									"type": "Int32"
+									"type": "Int32",
+									"ordinal": 2
 								}
 							},
 							{
@@ -58,8 +61,8 @@
 									"type": "Int32"
 								},
 								"sink": {
-									"name": "SalespersonPersonID",
-									"type": "Int32"
+									"type": "Int32",
+									"ordinal": 3
 								}
 							},
 							{
@@ -68,8 +71,8 @@
 									"type": "Int32"
 								},
 								"sink": {
-									"name": "PickedByPersonID",
-									"type": "Int32"
+									"type": "Int32",
+									"ordinal": 4
 								}
 							},
 							{
@@ -78,8 +81,8 @@
 									"type": "Int32"
 								},
 								"sink": {
-									"name": "ContactPersonID",
-									"type": "Int32"
+									"type": "Int32",
+									"ordinal": 5
 								}
 							},
 							{
@@ -88,8 +91,8 @@
 									"type": "Int32"
 								},
 								"sink": {
-									"name": "BackorderOrderID",
-									"type": "Int32"
+									"type": "Int32",
+									"ordinal": 6
 								}
 							},
 							{
@@ -98,8 +101,8 @@
 									"type": "DateTime"
 								},
 								"sink": {
-									"name": "OrderDate",
-									"type": "DateTime"
+									"type": "DateTime",
+									"ordinal": 7
 								}
 							},
 							{
@@ -108,8 +111,8 @@
 									"type": "DateTime"
 								},
 								"sink": {
-									"name": "ExpectedDeliveryDate",
-									"type": "DateTime"
+									"type": "DateTime",
+									"ordinal": 8
 								}
 							},
 							{
@@ -118,8 +121,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"name": "CustomerPurchaseOrderNumber",
-									"type": "String"
+									"type": "String",
+									"ordinal": 9
 								}
 							},
 							{
@@ -128,8 +131,8 @@
 									"type": "Boolean"
 								},
 								"sink": {
-									"name": "IsUndersupplyBackordered",
-									"type": "Boolean"
+									"type": "Boolean",
+									"ordinal": 10
 								}
 							},
 							{
@@ -138,8 +141,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"name": "Comments",
-									"type": "String"
+									"type": "String",
+									"ordinal": 11
 								}
 							},
 							{
@@ -148,8 +151,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"name": "DeliveryInstructions",
-									"type": "String"
+									"type": "String",
+									"ordinal": 12
 								}
 							},
 							{
@@ -158,8 +161,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"name": "InternalComments",
-									"type": "String"
+									"type": "String",
+									"ordinal": 13
 								}
 							},
 							{
@@ -168,8 +171,8 @@
 									"type": "DateTime"
 								},
 								"sink": {
-									"name": "PickingCompletedWhen",
-									"type": "DateTime"
+									"type": "DateTime",
+									"ordinal": 14
 								}
 							},
 							{
@@ -178,8 +181,8 @@
 									"type": "Int32"
 								},
 								"sink": {
-									"name": "LastEditedBy",
-									"type": "Int32"
+									"type": "String",
+									"ordinal": 15
 								}
 							},
 							{
@@ -188,8 +191,8 @@
 									"type": "DateTime"
 								},
 								"sink": {
-									"name": "LastEditedWhen",
-									"type": "DateTime"
+									"type": "DateTime",
+									"ordinal": 16
 								}
 							}
 						]
@@ -203,7 +206,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "wwiorders",
+						"referenceName": "wwwODS",
 						"type": "DatasetReference"
 					}
 				]
