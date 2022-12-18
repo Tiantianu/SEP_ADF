@@ -24,9 +24,6 @@
 			"transformations": [
 				{
 					"name": "derivedColumn1"
-				},
-				{
-					"name": "surrogateKey1"
 				}
 			],
 			"scriptLines": [
@@ -52,10 +49,7 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source1",
-				"surrogateKey1 derive(isActive = 1) ~> derivedColumn1",
-				"source1 keyGenerate(output(SurrKey as long),",
-				"     startAt: 1L,",
-				"     stepValue: 1L) ~> surrogateKey1",
+				"source1 derive(isActive = 1) ~> derivedColumn1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
