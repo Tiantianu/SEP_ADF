@@ -1,0 +1,90 @@
+{
+	"name": "wwiorders_sink",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase3",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "OrderID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CustomerID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SalespersonPersonID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "PickedByPersonID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ContactPersonID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "BackorderOrderID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "OrderDate",
+				"type": "date"
+			},
+			{
+				"name": "ExpectedDeliveryDate",
+				"type": "date"
+			},
+			{
+				"name": "CustomerPurchaseOrderNumber",
+				"type": "nvarchar"
+			},
+			{
+				"name": "IsUndersupplyBackordered",
+				"type": "bit"
+			},
+			{
+				"name": "Comments",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DeliveryInstructions",
+				"type": "nvarchar"
+			},
+			{
+				"name": "InternalComments",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PickingCompletedWhen",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "LastEditedBy",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "LastEditedWhen",
+				"type": "datetime2",
+				"scale": 7
+			}
+		],
+		"typeProperties": {
+			"schema": "Sales",
+			"table": "Orders"
+		}
+	}
+}
