@@ -26,6 +26,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "SinkOrders"
+				},
+				{
+					"dataset": {
+						"referenceName": "DelimitedText2",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
 				}
 			],
 			"transformations": [
@@ -34,6 +41,24 @@
 				},
 				{
 					"name": "AddingIsActive"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "lookup1"
+				},
+				{
+					"name": "IDnotNull"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "alterRow1"
 				}
 			],
 			"scriptLines": [
@@ -83,6 +108,67 @@
 				"     format: 'table') ~> OrderTable",
 				"WWIOrders filter(!isNull(OrderID)) ~> NotNull",
 				"NotNull derive(IsActive = 1) ~> AddingIsActive",
+				"OrderTable select(mapColumn(",
+				"          SQL_OrderID = OrderID,",
+				"          CustomerID,",
+				"          SalespersonPersonID,",
+				"          PickedByPersonID,",
+				"          ContactPersonID,",
+				"          BackorderOrderID,",
+				"          OrderDate,",
+				"          ExpectedDeliveryDate,",
+				"          CustomerPurchaseOrderNumber,",
+				"          IsUndersupplyBackordered,",
+				"          Comments,",
+				"          DeliveryInstructions,",
+				"          InternalComments,",
+				"          PickingCompletedWhen,",
+				"          LastEditedBy,",
+				"          LastEditedWhen",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"WWIOrders, select1 lookup(OrderID == SQL_OrderID,",
+				"     multiple: true,",
+				"     broadcast: 'auto')~> lookup1",
+				"lookup1 filter(!isNull(SQL_OrderID)) ~> IDnotNull",
+				"IDnotNull select(mapColumn(",
+				"          CustomerID = WWIOrders@CustomerID,",
+				"          SalespersonPersonID = WWIOrders@SalespersonPersonID,",
+				"          PickedByPersonID = WWIOrders@PickedByPersonID,",
+				"          ContactPersonID = WWIOrders@ContactPersonID,",
+				"          BackorderOrderID = WWIOrders@BackorderOrderID,",
+				"          OrderDate = WWIOrders@OrderDate,",
+				"          ExpectedDeliveryDate = WWIOrders@ExpectedDeliveryDate,",
+				"          CustomerPurchaseOrderNumber = WWIOrders@CustomerPurchaseOrderNumber,",
+				"          IsUndersupplyBackordered = WWIOrders@IsUndersupplyBackordered,",
+				"          Comments = WWIOrders@Comments,",
+				"          DeliveryInstructions = WWIOrders@DeliveryInstructions,",
+				"          InternalComments = WWIOrders@InternalComments,",
+				"          PickingCompletedWhen = WWIOrders@PickingCompletedWhen,",
+				"          LastEditedBy = WWIOrders@LastEditedBy,",
+				"          LastEditedWhen = WWIOrders@LastEditedWhen,",
+				"          SQL_OrderID,",
+				"          CustomerID = select1@CustomerID,",
+				"          SalespersonPersonID = select1@SalespersonPersonID,",
+				"          PickedByPersonID = select1@PickedByPersonID,",
+				"          ContactPersonID = select1@ContactPersonID,",
+				"          BackorderOrderID = select1@BackorderOrderID,",
+				"          OrderDate = select1@OrderDate,",
+				"          ExpectedDeliveryDate = select1@ExpectedDeliveryDate,",
+				"          CustomerPurchaseOrderNumber = select1@CustomerPurchaseOrderNumber,",
+				"          IsUndersupplyBackordered = select1@IsUndersupplyBackordered,",
+				"          Comments = select1@Comments,",
+				"          DeliveryInstructions = select1@DeliveryInstructions,",
+				"          InternalComments = select1@InternalComments,",
+				"          PickingCompletedWhen = select1@PickingCompletedWhen,",
+				"          LastEditedBy = select1@LastEditedBy,",
+				"          LastEditedWhen = select1@LastEditedWhen",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"select2 derive(isActive = 0) ~> derivedColumn1",
+				"derivedColumn1 alterRow(updateIf(1 == 1)) ~> alterRow1",
 				"AddingIsActive sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -128,8 +214,33 @@
 				"          PickingCompletedWhen,",
 				"          LastEditedBy,",
 				"          LastEditedWhen,",
-				"          IsActive",
-				"     )) ~> SinkOrders"
+				"          IsUndersupplyBackordered = IsActive",
+				"     )) ~> SinkOrders",
+				"alterRow1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Column_1 as string",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          OrderID = SQL_OrderID,",
+				"          CustomerID,",
+				"          SalespersonPersonID,",
+				"          PickedByPersonID,",
+				"          ContactPersonID,",
+				"          BackorderOrderID,",
+				"          OrderDate,",
+				"          ExpectedDeliveryDate,",
+				"          CustomerPurchaseOrderNumber,",
+				"          IsUndersupplyBackordered,",
+				"          Comments,",
+				"          DeliveryInstructions,",
+				"          InternalComments,",
+				"          PickingCompletedWhen,",
+				"          LastEditedBy,",
+				"          LastEditedWhen",
+				"     )) ~> sink1"
 			]
 		}
 	}
