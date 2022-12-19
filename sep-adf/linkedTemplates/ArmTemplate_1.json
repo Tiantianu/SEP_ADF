@@ -1585,6 +1585,43 @@
 								"parameters": {}
 							}
 						]
+					},
+					{
+						"name": "UpdateWatermark",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "Copy data1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[usp_write_watermark]",
+							"storedProcedureParameters": {
+								"LastModifiedTime": {
+									"value": "@(activity('LkpNewWatermark').output.firstrow.NewWatermarkvalue)",
+									"type": "Datetime"
+								},
+								"TableName": {
+									"value": "@(activity('LkpOldWatermark').output.firstrow.TableName)",
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureSqlDB",
+							"type": "LinkedServiceReference"
+						}
 					}
 				],
 				"policy": {
