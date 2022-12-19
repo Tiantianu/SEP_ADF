@@ -20,6 +20,9 @@
 		"AzureSqlDatabase3_connectionString": {
 			"value": ""
 		},
+		"AzureSqlDatabase4_connectionString": {
+			"value": ""
+		},
 		"wwi_connectionString": {
 			"value": ""
 		},

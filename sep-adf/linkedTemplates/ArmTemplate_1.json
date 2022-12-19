@@ -13,6 +13,413 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/wwiorders_sink')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase3",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "OrderID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CustomerID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SalespersonPersonID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "PickedByPersonID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ContactPersonID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "BackorderOrderID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "OrderDate",
+						"type": "date"
+					},
+					{
+						"name": "ExpectedDeliveryDate",
+						"type": "date"
+					},
+					{
+						"name": "CustomerPurchaseOrderNumber",
+						"type": "nvarchar"
+					},
+					{
+						"name": "IsUndersupplyBackordered",
+						"type": "bit"
+					},
+					{
+						"name": "Comments",
+						"type": "nvarchar"
+					},
+					{
+						"name": "DeliveryInstructions",
+						"type": "nvarchar"
+					},
+					{
+						"name": "InternalComments",
+						"type": "nvarchar"
+					},
+					{
+						"name": "PickingCompletedWhen",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "LastEditedBy",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "LastEditedWhen",
+						"type": "datetime2",
+						"scale": 7
+					}
+				],
+				"typeProperties": {
+					"schema": "Sales",
+					"table": "Orders"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/wwipackagetype')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase3",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "PackageTypeID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "PackageTypeName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LastEditedBy",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ValidFrom",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "ValidTo",
+						"type": "datetime2",
+						"scale": 7
+					}
+				],
+				"typeProperties": {
+					"schema": "Warehouse",
+					"table": "PackageTypes"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/wwipeople')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase3",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "PersonID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FullName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "PreferredName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SearchName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "IsPermittedToLogon",
+						"type": "bit"
+					},
+					{
+						"name": "LogonName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "IsExternalLogonProvider",
+						"type": "bit"
+					},
+					{
+						"name": "HashedPassword",
+						"type": "varbinary"
+					},
+					{
+						"name": "IsSystemUser",
+						"type": "bit"
+					},
+					{
+						"name": "IsEmployee",
+						"type": "bit"
+					},
+					{
+						"name": "IsSalesperson",
+						"type": "bit"
+					},
+					{
+						"name": "UserPreferences",
+						"type": "nvarchar"
+					},
+					{
+						"name": "PhoneNumber",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FaxNumber",
+						"type": "nvarchar"
+					},
+					{
+						"name": "EmailAddress",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Photo",
+						"type": "varbinary"
+					},
+					{
+						"name": "CustomFields",
+						"type": "nvarchar"
+					},
+					{
+						"name": "OtherLanguages",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LastEditedBy",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ValidFrom",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "ValidTo",
+						"type": "datetime2",
+						"scale": 7
+					}
+				],
+				"typeProperties": {
+					"schema": "Application",
+					"table": "People"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/wwistockitems')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase3",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "StockItemID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "StockItemName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SupplierID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ColorID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "UnitPackageID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "OuterPackageID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Brand",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Size",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LeadTimeDays",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "QuantityPerOuter",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "IsChillerStock",
+						"type": "bit"
+					},
+					{
+						"name": "Barcode",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TaxRate",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 3
+					},
+					{
+						"name": "UnitPrice",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "RecommendedRetailPrice",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "TypicalWeightPerUnit",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 3
+					},
+					{
+						"name": "MarketingComments",
+						"type": "nvarchar"
+					},
+					{
+						"name": "InternalComments",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Photo",
+						"type": "varbinary"
+					},
+					{
+						"name": "CustomFields",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Tags",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SearchDetails",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LastEditedBy",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ValidFrom",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "ValidTo",
+						"type": "datetime2",
+						"scale": 7
+					}
+				],
+				"typeProperties": {
+					"schema": "Warehouse",
+					"table": "StockItems"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/wwwODS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "adf"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/1_CopyPipeline')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -349,18 +756,278 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/SCDType2')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "wwiorders",
+								"type": "DatasetReference"
+							},
+							"name": "WWIOrders"
+						},
+						{
+							"dataset": {
+								"referenceName": "FactOrder",
+								"type": "DatasetReference"
+							},
+							"name": "OrderTable"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "FactOrder",
+								"type": "DatasetReference"
+							},
+							"name": "SinkOrders"
+						},
+						{
+							"dataset": {
+								"referenceName": "FactOrder",
+								"type": "DatasetReference"
+							},
+							"name": "sinkUpdate"
+						}
+					],
+					"transformations": [
+						{
+							"name": "NotNull"
+						},
+						{
+							"name": "AddingIsActive"
+						},
+						{
+							"name": "lookup1"
+						},
+						{
+							"name": "IDnotNull"
+						},
+						{
+							"name": "select2"
+						},
+						{
+							"name": "derivedColumn1"
+						},
+						{
+							"name": "alterRow1"
+						},
+						{
+							"name": "select3"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          OrderID as integer,",
+						"          CustomerID as integer,",
+						"          SalespersonPersonID as integer,",
+						"          PickedByPersonID as integer,",
+						"          ContactPersonID as integer,",
+						"          BackorderOrderID as integer,",
+						"          OrderDate as date,",
+						"          ExpectedDeliveryDate as date,",
+						"          CustomerPurchaseOrderNumber as string,",
+						"          IsUndersupplyBackordered as boolean,",
+						"          Comments as string,",
+						"          DeliveryInstructions as string,",
+						"          InternalComments as string,",
+						"          PickingCompletedWhen as timestamp,",
+						"          LastEditedBy as integer,",
+						"          LastEditedWhen as timestamp",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> WWIOrders",
+						"source(output(",
+						"          {Order Key} as long,",
+						"          {City Key} as integer,",
+						"          {Customer Key} as integer,",
+						"          {Stock Item Key} as integer,",
+						"          {Order Date Key} as date,",
+						"          {Picked Date Key} as date,",
+						"          {Salesperson Key} as integer,",
+						"          {Picker Key} as integer,",
+						"          {WWI Order ID} as integer,",
+						"          {WWI Backorder ID} as integer,",
+						"          Description as string,",
+						"          Package as string,",
+						"          Quantity as integer,",
+						"          {Unit Price} as decimal(18,2),",
+						"          {Tax Rate} as decimal(18,3),",
+						"          {Total Excluding Tax} as decimal(18,2),",
+						"          {Tax Amount} as decimal(18,2),",
+						"          {Total Including Tax} as decimal(18,2),",
+						"          {Lineage Key} as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> OrderTable",
+						"WWIOrders filter(!isNull(OrderID)) ~> NotNull",
+						"NotNull derive({Lineage Key} = 9) ~> AddingIsActive",
+						"WWIOrders, OrderTable lookup(OrderID == {WWI Order ID},",
+						"     multiple: true,",
+						"     broadcast: 'auto')~> lookup1",
+						"lookup1 filter(!isNull({WWI Order ID})) ~> IDnotNull",
+						"IDnotNull select(mapColumn(",
+						"          {Order Key},",
+						"          {Customer Key},",
+						"          {Order Date Key},",
+						"          {Picked Date Key},",
+						"          {Salesperson Key},",
+						"          {Picker Key},",
+						"          {WWI Order ID},",
+						"          {WWI Backorder ID},",
+						"          {Lineage Key}",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select2",
+						"select2 derive({Lineage Key} = 0) ~> derivedColumn1",
+						"derivedColumn1 alterRow(updateIf(9==9)) ~> alterRow1",
+						"OrderTable select(mapColumn(",
+						"          {SQL_Order Key} = {Order Key},",
+						"          {SQL_Customer Key} = {Customer Key},",
+						"          {SQL_Order Date Key} = {Order Date Key},",
+						"          {SQL_Picked Date Key} = {Picked Date Key},",
+						"          {SQL_Salesperson Key} = {Salesperson Key},",
+						"          {SQL_Picker Key} = {Picker Key},",
+						"          {SQL_WWI Order ID} = {WWI Order ID},",
+						"          {SQL_WWI Backorder ID} = {WWI Backorder ID},",
+						"          {SQL_Lineage Key} = {Lineage Key}",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select3",
+						"AddingIsActive sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          {Order Key} as long,",
+						"          {City Key} as integer,",
+						"          {Customer Key} as integer,",
+						"          {Stock Item Key} as integer,",
+						"          {Order Date Key} as date,",
+						"          {Picked Date Key} as date,",
+						"          {Salesperson Key} as integer,",
+						"          {Picker Key} as integer,",
+						"          {WWI Order ID} as integer,",
+						"          {WWI Backorder ID} as integer,",
+						"          Description as string,",
+						"          Package as string,",
+						"          Quantity as integer,",
+						"          {Unit Price} as decimal(18,2),",
+						"          {Tax Rate} as decimal(18,3),",
+						"          {Total Excluding Tax} as decimal(18,2),",
+						"          {Tax Amount} as decimal(18,2),",
+						"          {Total Including Tax} as decimal(18,2),",
+						"          {Lineage Key} as integer",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     saveOrder: 2,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          {Customer Key} = CustomerID,",
+						"          {Order Date Key} = OrderDate,",
+						"          {Picked Date Key} = PickingCompletedWhen,",
+						"          {Salesperson Key} = SalespersonPersonID,",
+						"          {Picker Key} = PickedByPersonID,",
+						"          {WWI Order ID} = OrderID,",
+						"          {WWI Backorder ID} = BackorderOrderID,",
+						"          {Lineage Key}",
+						"     )) ~> SinkOrders",
+						"alterRow1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          {Order Key} as long,",
+						"          {City Key} as integer,",
+						"          {Customer Key} as integer,",
+						"          {Stock Item Key} as integer,",
+						"          {Order Date Key} as date,",
+						"          {Picked Date Key} as date,",
+						"          {Salesperson Key} as integer,",
+						"          {Picker Key} as integer,",
+						"          {WWI Order ID} as integer,",
+						"          {WWI Backorder ID} as integer,",
+						"          Description as string,",
+						"          Package as string,",
+						"          Quantity as integer,",
+						"          {Unit Price} as decimal(18,2),",
+						"          {Tax Rate} as decimal(18,3),",
+						"          {Total Excluding Tax} as decimal(18,2),",
+						"          {Tax Amount} as decimal(18,2),",
+						"          {Total Including Tax} as decimal(18,2),",
+						"          {Lineage Key} as integer",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     saveOrder: 1,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          {Order Key},",
+						"          {Customer Key},",
+						"          {Order Date Key},",
+						"          {Picked Date Key},",
+						"          {Salesperson Key},",
+						"          {Picker Key},",
+						"          {WWI Order ID},",
+						"          {WWI Backorder ID},",
+						"          {Lineage Key}",
+						"     )) ~> sinkUpdate"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/powerquery1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "WranglingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"name": "FactOrder",
+							"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> FactOrder",
+							"dataset": {
+								"referenceName": "FactOrder",
+								"type": "DatasetReference"
+							}
+						}
+					],
+					"script": "section Section1;\r\nshared FactOrder = let AdfDoc = Sql.Database(\"sepadf.database.windows.net\", \"WideWorldImportersDW-Standard\", [CreateNavigationProperties = false]), InputTable = AdfDoc{[Schema=\"Fact\",Item=\"Order\"]}[Data] in InputTable;\r\nshared UserQuery = let Source = #\"FactOrder\" in Source;\r\n",
+					"documentLocale": "en-us"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DimEmployeePipeline')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "LoadDimEmployee",
+						"name": "DimEmployeeLoader2",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [],
 						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 3,
+							"timeout": "0.12:00:00",
+							"retry": 0,
 							"retryIntervalInSeconds": 30,
 							"secureOutput": false,
 							"secureInput": false
@@ -399,6 +1066,55 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/DimEmployeeLoader2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "SCDType2",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "SCDType2",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"WWIOrders": {},
+									"OrderTable": {},
+									"SinkOrders": {},
+									"sinkUpdate": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/SCDType2')]"
 			]
 		}
 	]
