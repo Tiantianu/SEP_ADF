@@ -79,7 +79,10 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "select * from data_scr where LastModifytime > '@{activity('LkpOldWatermark').output.firstRow.WatermarkValue}' and LastModifytime <= '@{activity('LkpNewWaterMark').output.firstRow.NewWatermarkvalue}'",
+						"sqlReaderQuery": {
+							"value": "select * from data_scr where LastModifytime > '@{activity('LkpOldWatermark').output.firstRow.WatermarkValue}' and LastModifytime <= '@{activity('LkpNewWaterMark').output.firstRow.NewWatermarkvalue}'",
+							"type": "Expression"
+						},
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -140,11 +143,17 @@
 					"storedProcedureName": "[dbo].[usp_write_watermark]",
 					"storedProcedureParameters": {
 						"LastModifiedTime": {
-							"value": "@(activity('LkpNewWatermark').output.firstrow.NewWatermarkvalue)",
+							"value": {
+								"value": "@(activity('LkpNewWaterMark').output.firstrow.NewWatermarkvalue)",
+								"type": "Expression"
+							},
 							"type": "Datetime"
 						},
 						"TableName": {
-							"value": "@(activity('LkpOldWatermark').output.firstrow.TableName)",
+							"value": {
+								"value": "@(activity('LkpOldWatermark').output.firstrow.TableName)",
+								"type": "Expression"
+							},
 							"type": "String"
 						}
 					}
