@@ -1,0 +1,20 @@
+{
+	"name": "powerquery1",
+	"properties": {
+		"type": "WranglingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"name": "FactOrder",
+					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~>  FactOrder",
+					"dataset": {
+						"referenceName": "FactOrder",
+						"type": "DatasetReference"
+					}
+				}
+			],
+			"script": "section Section1;\r\nshared FactOrder = let AdfDoc = Sql.Database(\"sepadf.database.windows.net\", \"WideWorldImportersDW-Standard\", [CreateNavigationProperties = false]), InputTable = AdfDoc{[Schema=\"Fact\",Item=\"Order\"]}[Data] in InputTable;\r\nshared UserQuery = let Source = #\"FactOrder\" in Source;\r\n",
+			"documentLocale": "en-us"
+		}
+	}
+}

@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Pre_sink",
+				"name": "SCDType2",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "Pre_sink",
+						"referenceName": "SCDType2",
 						"type": "DataFlowReference"
 					},
 					"compute": {
