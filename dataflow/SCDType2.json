@@ -129,7 +129,7 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select2",
 				"select2 derive({Lineage Key} = 0) ~> derivedColumn1",
-				"derivedColumn1 alterRow(updateIf(9 == 9)) ~> alterRow1",
+				"derivedColumn1 alterRow(updateIf(9==9)) ~> alterRow1",
 				"OrderTable select(mapColumn(",
 				"          {SQL_Order Key} = {Order Key},",
 				"          {SQL_Customer Key} = {Customer Key},",
