@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "LkpOldWatermark",
+				"name": "LookupOldWaterMarkActivity",
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
@@ -27,7 +27,7 @@
 				}
 			},
 			{
-				"name": "LkpNewWatermark",
+				"name": "LookupNewWaterMarkActivity",
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
@@ -41,7 +41,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT max(LastModifytime) as NewWatermarkValue from data_src",
+						"sqlReaderQuery": "select MAX(LastModifytime) as NewWatermarkvalue from data_source_table",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -52,17 +52,17 @@
 				}
 			},
 			{
-				"name": "Copy data1",
+				"name": "IncrementalCopyActivity",
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "LkpNewWatermark",
+						"activity": "LookupNewWaterMarkActivity",
 						"dependencyConditions": [
 							"Succeeded"
 						]
 					},
 					{
-						"activity": "LkpOldWatermark",
+						"activity": "LookupOldWaterMarkActivity",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -80,7 +80,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "select * from data_scr where LastModifytime > '@{activity('LkpOldWatermark').output.firstRow.WatermarkValue}' and LastModifytime <= '@{activity('LkpNewWatermark').output.firstRow.NewWatermarkvalue}'",
+							"value": "select * from data_source_table where LastModifytime > '@{activity('LookupOldWaterMarkActivity').output.firstRow.WatermarkValue}' and LastModifytime <= '@{activity('LookupNewWaterMarkActivity').output.firstRow.NewWatermarkvalue}'",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
@@ -121,11 +121,11 @@
 				]
 			},
 			{
-				"name": "UpdateWatermark",
+				"name": "StoredProceduretoWriteWatermarkActivity",
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
-						"activity": "Copy data1",
+						"activity": "IncrementalCopyActivity",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -144,14 +144,14 @@
 					"storedProcedureParameters": {
 						"LastModifiedTime": {
 							"value": {
-								"value": "@(activity('LkpNewWatermark').output.firstRow.NewWatermarkvalue)",
+								"value": "@{activity('LookupNewWaterMarkActivity').output.firstRow.NewWatermarkvalue}",
 								"type": "Expression"
 							},
 							"type": "Datetime"
 						},
 						"TableName": {
 							"value": {
-								"value": "@(activity('LkpOldWatermark').output.firstRow.TableName)",
+								"value": "@{activity('LookupOldWaterMarkActivity').output.firstRow.TableName}",
 								"type": "Expression"
 							},
 							"type": "String"
