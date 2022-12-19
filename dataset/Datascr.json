@@ -1,0 +1,12 @@
+{
+	"name": "Datascr",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}

@@ -1,0 +1,123 @@
+{
+	"name": "2_IncrementallyLoadData2",
+	"properties": {
+		"activities": [
+			{
+				"name": "LkpOldWatermark",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "WaterMarkTable",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "LkpNewWaterMark",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT max(LastModifytime) as NewWatermarkValue from data_src",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Datascr",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "LkpNewWaterMark",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "LkpOldWatermark",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select * from data_scr where LastModifytime > '@{activity('LkpOldWatermark').output.firstRow.WatermarkValue}' and LastModifytime <= '@{activity('LkpNewWaterMark').output.firstRow.NewWatermarkvalue}'",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Datascr",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "BlbStore",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": []
+	}
+}
