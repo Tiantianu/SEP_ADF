@@ -208,7 +208,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> NameNorm2",
-				"SetAttrsUpdate alterRow(insertIf(true())) ~> alterRow2",
+				"SetAttrsUpdate alterRow(insertIf(2 == 2)) ~> alterRow2",
 				"SetAttrsForNew sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
