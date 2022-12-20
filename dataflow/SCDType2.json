@@ -100,7 +100,7 @@
 				"WWICustomer, CustomerTable lookup(WWICustomer@{WWI Customer ID} == CustomerTable@{WWI Customer ID},",
 				"     multiple: true,",
 				"     broadcast: 'auto')~> lookup1",
-				"lookup1 filter(!isNull(WWICustomer@{WWI Customer ID})) ~> IDnotNull",
+				"lookup1 filter(!isNull(WWICustomer@{WWI Customer ID}) && !isNull({Bill To Customer})) ~> IDnotNull",
 				"IDnotNull select(mapColumn(",
 				"          {Customer Key} = WWICustomer@{Customer Key},",
 				"          {WWI Customer ID} = WWICustomer@{WWI Customer ID},",
