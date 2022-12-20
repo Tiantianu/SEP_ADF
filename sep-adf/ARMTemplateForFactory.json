@@ -2767,7 +2767,7 @@
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> select2",
 						"select2 derive({Lineage Key} = 0) ~> derivedColumn1",
-						"derivedColumn1 alterRow(updateIf(2==2)) ~> alterRow1",
+						"derivedColumn1 alterRow(insertIf(2==2)) ~> alterRow1",
 						"CustomerTable select(mapColumn(",
 						"          {Customer Key},",
 						"          {WWI Customer ID},",
