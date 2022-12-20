@@ -23,10 +23,6 @@
 				"type": "nvarchar"
 			},
 			{
-				"name": "Bill To Customer",
-				"type": "nvarchar"
-			},
-			{
 				"name": "Category",
 				"type": "nvarchar"
 			},
