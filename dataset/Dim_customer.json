@@ -1,5 +1,5 @@
 {
-	"name": "dw_customer",
+	"name": "Dim_customer",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureSqlDB",
