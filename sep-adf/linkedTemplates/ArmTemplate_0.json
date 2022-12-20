@@ -421,6 +421,73 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Dim_customer')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Customer Key",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "WWI Customer ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Customer",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Category",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Buying Group",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Primary Contact",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Postal Code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Valid From",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "Valid To",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "Lineage Key",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "Dimension",
+					"table": "Customer"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDB')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/EmployeeFiles')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -594,45 +661,74 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/SourceDataset_b28')]",
+			"name": "[concat(parameters('factoryName'), '/Input_customer')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabase3",
+					"referenceName": "AzureSqlDB",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
-				"schema": [],
+				"schema": [
+					{
+						"name": "Customer Key",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "WWI Customer ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Customer",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Bill To Customer",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Category",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Buying Group",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Primary Contact",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Postal Code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Valid From",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "Valid To",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "Lineage Key",
+						"type": "int",
+						"precision": 10
+					}
+				],
 				"typeProperties": {
-					"schema": "Sales",
-					"table": "Orders"
+					"schema": "Dimension",
+					"table": "Customer"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase3')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SourceDataset_s6f')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabase3",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "Sales",
-					"table": "Orders"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase3')]"
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDB')]"
 			]
 		}
 	]
