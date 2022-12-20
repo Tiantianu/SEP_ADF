@@ -83,6 +83,9 @@
 				},
 				{
 					"name": "NameNorm2"
+				},
+				{
+					"name": "alterRow2"
 				}
 			],
 			"scriptLines": [
@@ -205,6 +208,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> NameNorm2",
+				"SetAttrsUpdate alterRow(insertIf(true())) ~> alterRow2",
 				"SetAttrsForNew sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -241,7 +245,7 @@
 				"          {Lineage Key}",
 				"     ),",
 				"     partitionBy('roundRobin', 4)) ~> sinkNew",
-				"SetAttrsUpdate sink(allowSchemaDrift: true,",
+				"alterRow2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          {Customer Key} as integer,",
