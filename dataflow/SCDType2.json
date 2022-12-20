@@ -95,7 +95,7 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> CustomerTable",
-				"WWICustomer filter(!isNull({WWI Customer ID})) ~> NotNull",
+				"WWICustomer filter(!isNull({WWI Customer ID})&& !isNull({Bill To Customer})) ~> NotNull",
 				"NotNull derive({Lineage Key} = 2) ~> AddingIsActive",
 				"WWICustomer, CustomerTable lookup(WWICustomer@{WWI Customer ID} == CustomerTable@{WWI Customer ID},",
 				"     multiple: true,",
