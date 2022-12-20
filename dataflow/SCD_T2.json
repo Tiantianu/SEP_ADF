@@ -48,9 +48,6 @@
 			],
 			"transformations": [
 				{
-					"name": "TypeConversions"
-				},
-				{
 					"name": "TypeConversionsAndSetAttrs"
 				},
 				{
@@ -145,15 +142,14 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> DimCustomer",
-				"DimCustomer derive({WWI Customer ID} = toInteger({WWI Customer ID})) ~> TypeConversions",
 				"NullFilter derive(CustomerID = toInteger(CustomerID),",
 				"          processtime = currentTimestamp()) ~> TypeConversionsAndSetAttrs",
-				"TypeConversionsAndSetAttrs, TypeConversions lookup(CustomerID == {WWI Customer ID},",
+				"TypeConversionsAndSetAttrs, DimCustomer lookup(CustomerID == {WWI Customer ID},",
 				"     multiple: true,",
 				"     broadcast: 'auto')~> LookupIDs",
 				"NormNames split({Lineage Key} == 0,",
 				"     disjoint: false) ~> ConditionalSplit1@(NewRow, CheckForUpdates)",
-				"NameNorm2, TypeConversions exists({WWI Customer ID} == {CustomerID},",
+				"NameNorm2, DimCustomer exists({WWI Customer ID} == {CustomerID},",
 				"     negate:false,",
 				"     broadcast: 'auto')~> checkForChanges",
 				"ConditionalSplit1@NewRow derive({Lineage Key} = 2) ~> SetAttrsForNew",
