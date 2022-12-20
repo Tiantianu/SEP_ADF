@@ -1888,6 +1888,225 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/SCDType2_copy1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "wwicustomer",
+								"type": "DatasetReference"
+							},
+							"name": "WWICustomer"
+						},
+						{
+							"dataset": {
+								"referenceName": "dw_customer",
+								"type": "DatasetReference"
+							},
+							"name": "CustomerTable"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "dw_customer",
+								"type": "DatasetReference"
+							},
+							"name": "SinkOrders"
+						},
+						{
+							"dataset": {
+								"referenceName": "dw_customer",
+								"type": "DatasetReference"
+							},
+							"name": "sinkUpdate"
+						}
+					],
+					"transformations": [
+						{
+							"name": "NotNull"
+						},
+						{
+							"name": "AddingIsActive"
+						},
+						{
+							"name": "lookup1"
+						},
+						{
+							"name": "IDnotNull"
+						},
+						{
+							"name": "select2"
+						},
+						{
+							"name": "derivedColumn1"
+						},
+						{
+							"name": "alterRow1"
+						},
+						{
+							"name": "select3"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          CustomerID as integer,",
+						"          CustomerName as string,",
+						"          BillToCustomerID as integer,",
+						"          CustomerCategoryID as integer,",
+						"          BuyingGroupID as integer,",
+						"          PrimaryContactPersonID as integer,",
+						"          AlternateContactPersonID as integer,",
+						"          DeliveryMethodID as integer,",
+						"          DeliveryCityID as integer,",
+						"          PostalCityID as integer,",
+						"          CreditLimit as decimal(18,2),",
+						"          AccountOpenedDate as date,",
+						"          StandardDiscountPercentage as decimal(18,3),",
+						"          IsStatementSent as boolean,",
+						"          IsOnCreditHold as boolean,",
+						"          PaymentDays as integer,",
+						"          PhoneNumber as string,",
+						"          FaxNumber as string,",
+						"          DeliveryRun as string,",
+						"          RunPosition as string,",
+						"          WebsiteURL as string,",
+						"          DeliveryAddressLine1 as string,",
+						"          DeliveryAddressLine2 as string,",
+						"          DeliveryPostalCode as string,",
+						"          DeliveryLocation as binary,",
+						"          PostalAddressLine1 as string,",
+						"          PostalAddressLine2 as string,",
+						"          PostalPostalCode as string,",
+						"          LastEditedBy as integer,",
+						"          ValidFrom as timestamp,",
+						"          ValidTo as timestamp",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> WWICustomer",
+						"source(output(",
+						"          {Customer Key} as integer,",
+						"          {WWI Customer ID} as integer,",
+						"          Customer as string,",
+						"          {Bill To Customer} as string,",
+						"          Category as string,",
+						"          {Buying Group} as string,",
+						"          {Primary Contact} as string,",
+						"          {Postal Code} as string,",
+						"          {Valid From} as timestamp,",
+						"          {Valid To} as timestamp,",
+						"          {Lineage Key} as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> CustomerTable",
+						"WWICustomer filter(!isNull(CustomerID)) ~> NotNull",
+						"NotNull derive({Lineage Key} = 2) ~> AddingIsActive",
+						"WWICustomer, CustomerTable lookup(CustomerID == {WWI Customer ID},",
+						"     multiple: true,",
+						"     broadcast: 'auto')~> lookup1",
+						"lookup1 filter(!isNull({CustomerID})) ~> IDnotNull",
+						"IDnotNull select(mapColumn(",
+						"          CustomerID,",
+						"          CustomerName,",
+						"          ValidFrom,",
+						"          ValidTo,",
+						"          {Customer Key},",
+						"          {Lineage Key}",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select2",
+						"select2 derive({Lineage Key} = 0) ~> derivedColumn1",
+						"derivedColumn1 alterRow(updateIf(2==2)) ~> alterRow1",
+						"CustomerTable select(mapColumn(",
+						"          {Customer Key},",
+						"          {WWI Customer ID},",
+						"          Customer,",
+						"          {Valid From},",
+						"          {Valid To},",
+						"          {Lineage Key}",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select3",
+						"AddingIsActive sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          {Customer Key} as integer,",
+						"          {WWI Customer ID} as integer,",
+						"          Customer as string,",
+						"          {Bill To Customer} as string,",
+						"          Category as string,",
+						"          {Buying Group} as string,",
+						"          {Primary Contact} as string,",
+						"          {Postal Code} as string,",
+						"          {Valid From} as timestamp,",
+						"          {Valid To} as timestamp,",
+						"          {Lineage Key} as integer",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     saveOrder: 2,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          {WWI Customer ID} = CustomerID,",
+						"          Customer = CustomerName,",
+						"          {Valid From} = ValidFrom,",
+						"          {Valid To} = ValidTo,",
+						"          {Lineage Key}",
+						"     )) ~> SinkOrders",
+						"alterRow1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          {Customer Key} as integer,",
+						"          {WWI Customer ID} as integer,",
+						"          Customer as string,",
+						"          {Bill To Customer} as string,",
+						"          Category as string,",
+						"          {Buying Group} as string,",
+						"          {Primary Contact} as string,",
+						"          {Postal Code} as string,",
+						"          {Valid From} as timestamp,",
+						"          {Valid To} as timestamp,",
+						"          {Lineage Key} as integer",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     saveOrder: 1,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          {Customer Key},",
+						"          {WWI Customer ID} = CustomerID,",
+						"          Customer = CustomerName,",
+						"          {Valid From} = ValidFrom,",
+						"          {Valid To} = ValidTo,",
+						"          {Lineage Key}",
+						"     )) ~> sinkUpdate"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/wwicustomer')]",
+				"[concat(variables('factoryId'), '/datasets/dw_customer')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/SCD_T2')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -2099,7 +2318,7 @@
 						"     ),",
 						"     skipDuplicateMapInputs: false,",
 						"     skipDuplicateMapOutputs: false) ~> NameNorm2",
-						"SetAttrsUpdate alterRow(insertIf(true())) ~> alterRow2",
+						"SetAttrsUpdate alterRow(insertIf(2==2)) ~> alterRow2",
 						"SetAttrsForNew sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     input(",
@@ -2226,7 +2445,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "SCD_T2",
+						"name": "SCDType2_copy1",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [],
 						"policy": {
@@ -2239,15 +2458,14 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "SCD_T2",
+								"referenceName": "SCDType2_copy1",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
 									"WWICustomer": {},
-									"DimCustomer": {},
-									"sinkNew": {},
-									"sinkUpdates": {},
-									"sinkInactive": {}
+									"CustomerTable": {},
+									"SinkOrders": {},
+									"sinkUpdate": {}
 								}
 							},
 							"staging": {},
@@ -2266,7 +2484,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/SCD_T2')]"
+				"[concat(variables('factoryId'), '/dataflows/SCDType2_copy1')]"
 			]
 		}
 	]
