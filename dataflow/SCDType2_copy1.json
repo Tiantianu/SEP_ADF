@@ -1,0 +1,218 @@
+{
+	"name": "SCDType2_copy1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "wwicustomer",
+						"type": "DatasetReference"
+					},
+					"name": "WWICustomer"
+				},
+				{
+					"dataset": {
+						"referenceName": "dw_customer",
+						"type": "DatasetReference"
+					},
+					"name": "CustomerTable"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "dw_customer",
+						"type": "DatasetReference"
+					},
+					"name": "SinkOrders"
+				},
+				{
+					"dataset": {
+						"referenceName": "FactOrder",
+						"type": "DatasetReference"
+					},
+					"name": "sinkUpdate"
+				}
+			],
+			"transformations": [
+				{
+					"name": "NotNull"
+				},
+				{
+					"name": "AddingIsActive"
+				},
+				{
+					"name": "lookup1"
+				},
+				{
+					"name": "IDnotNull"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "alterRow1"
+				},
+				{
+					"name": "select3"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          CustomerID as integer,",
+				"          CustomerName as string,",
+				"          BillToCustomerID as integer,",
+				"          CustomerCategoryID as integer,",
+				"          BuyingGroupID as integer,",
+				"          PrimaryContactPersonID as integer,",
+				"          AlternateContactPersonID as integer,",
+				"          DeliveryMethodID as integer,",
+				"          DeliveryCityID as integer,",
+				"          PostalCityID as integer,",
+				"          CreditLimit as decimal(18,2),",
+				"          AccountOpenedDate as date,",
+				"          StandardDiscountPercentage as decimal(18,3),",
+				"          IsStatementSent as boolean,",
+				"          IsOnCreditHold as boolean,",
+				"          PaymentDays as integer,",
+				"          PhoneNumber as string,",
+				"          FaxNumber as string,",
+				"          DeliveryRun as string,",
+				"          RunPosition as string,",
+				"          WebsiteURL as string,",
+				"          DeliveryAddressLine1 as string,",
+				"          DeliveryAddressLine2 as string,",
+				"          DeliveryPostalCode as string,",
+				"          DeliveryLocation as binary,",
+				"          PostalAddressLine1 as string,",
+				"          PostalAddressLine2 as string,",
+				"          PostalPostalCode as string,",
+				"          LastEditedBy as integer,",
+				"          ValidFrom as timestamp,",
+				"          ValidTo as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> WWICustomer",
+				"source(output(",
+				"          {Customer Key} as integer,",
+				"          {WWI Customer ID} as integer,",
+				"          Customer as string,",
+				"          {Bill To Customer} as string,",
+				"          Category as string,",
+				"          {Buying Group} as string,",
+				"          {Primary Contact} as string,",
+				"          {Postal Code} as string,",
+				"          {Valid From} as timestamp,",
+				"          {Valid To} as timestamp,",
+				"          {Lineage Key} as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> CustomerTable",
+				"WWICustomer filter(!isNull(CustomerID)) ~> NotNull",
+				"NotNull derive({Lineage Key} = 2) ~> AddingIsActive",
+				"WWICustomer, CustomerTable lookup(CustomerID == {WWI Customer ID},",
+				"     multiple: true,",
+				"     broadcast: 'auto')~> lookup1",
+				"lookup1 filter(!isNull({CustomerID})) ~> IDnotNull",
+				"IDnotNull select(mapColumn(",
+				"          CustomerID,",
+				"          CustomerName,",
+				"          ValidFrom,",
+				"          ValidTo,",
+				"          {Customer Key},",
+				"          {Lineage Key}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"select2 derive({Lineage Key} = 0) ~> derivedColumn1",
+				"derivedColumn1 alterRow(updateIf(2==2)) ~> alterRow1",
+				"CustomerTable select(mapColumn(",
+				"          {Customer Key},",
+				"          {WWI Customer ID},",
+				"          Customer,",
+				"          {Valid From},",
+				"          {Valid To},",
+				"          {Lineage Key}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select3",
+				"AddingIsActive sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          {Customer Key} as integer,",
+				"          {WWI Customer ID} as integer,",
+				"          Customer as string,",
+				"          {Bill To Customer} as string,",
+				"          Category as string,",
+				"          {Buying Group} as string,",
+				"          {Primary Contact} as string,",
+				"          {Postal Code} as string,",
+				"          {Valid From} as timestamp,",
+				"          {Valid To} as timestamp,",
+				"          {Lineage Key} as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 2,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          {WWI Customer ID} = CustomerID,",
+				"          Customer = CustomerName,",
+				"          {Valid From} = ValidFrom,",
+				"          {Valid To} = ValidTo,",
+				"          {Lineage Key}",
+				"     )) ~> SinkOrders",
+				"alterRow1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          {Order Key} as long,",
+				"          {Customer Key} as integer,",
+				"          {Stock Item Key} as integer,",
+				"          {Order Date Key} as date,",
+				"          {Picked Date Key} as date,",
+				"          {Salesperson Key} as integer,",
+				"          {Picker Key} as integer,",
+				"          {WWI Order ID} as integer,",
+				"          {WWI Backorder ID} as integer,",
+				"          Description as string,",
+				"          Package as string,",
+				"          Quantity as integer,",
+				"          {Unit Price} as decimal(18,2),",
+				"          {Tax Rate} as decimal(18,3),",
+				"          {Total Excluding Tax} as decimal(18,2),",
+				"          {Tax Amount} as decimal(18,2),",
+				"          {Total Including Tax} as decimal(18,2),",
+				"          {Lineage Key} as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:true,",
+				"     upsertable:false,",
+				"     keys:['Customer Key'],",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          {Customer Key},",
+				"          {WWI Order ID} = CustomerID,",
+				"          {Lineage Key}",
+				"     )) ~> sinkUpdate"
+			]
+		}
+	}
+}
