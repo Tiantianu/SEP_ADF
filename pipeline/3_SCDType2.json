@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "SCDType2",
+				"name": "SCD_T2",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "SCDType2",
+						"referenceName": "SCD_T2",
 						"type": "DataFlowReference"
 					},
 					"compute": {
