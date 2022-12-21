@@ -1,0 +1,274 @@
+{
+	"name": "DimLoader",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Input_customer",
+						"type": "DatasetReference"
+					},
+					"name": "Input",
+					"description": " Source employees file, changes every day"
+				},
+				{
+					"dataset": {
+						"referenceName": "Dim_customer",
+						"type": "DatasetReference"
+					},
+					"name": "DimEmployees",
+					"description": "Current rows in DimEmployees DW table"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DimEmp1",
+						"type": "DatasetReference"
+					},
+					"name": "sinkNew",
+					"description": " "
+				},
+				{
+					"dataset": {
+						"referenceName": "DimEmp1",
+						"type": "DatasetReference"
+					},
+					"name": "sinkUpdates",
+					"description": " "
+				},
+				{
+					"dataset": {
+						"referenceName": "DimEmp1",
+						"type": "DatasetReference"
+					},
+					"name": "sinkInactive",
+					"description": " Age out old rows"
+				}
+			],
+			"transformations": [
+				{
+					"name": "LookupIDs"
+				},
+				{
+					"name": "ConditionalSplit1"
+				},
+				{
+					"name": "checkForChanges"
+				},
+				{
+					"name": "SetAttrsForNew"
+				},
+				{
+					"name": "SetAttrsInactive",
+					"description": "make iscurrent 0"
+				},
+				{
+					"name": "SetAttrsUpdate"
+				},
+				{
+					"name": "NormNames"
+				},
+				{
+					"name": "InactiveFields"
+				},
+				{
+					"name": "AlterRow1"
+				},
+				{
+					"name": "NullFilter",
+					"description": "Filter out NULLs from source file"
+				},
+				{
+					"name": "NameNorm2"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {Customer Key} as integer,",
+				"          {WWI Customer ID} as integer,",
+				"          Customer as string,",
+				"          {Bill To Customer} as string,",
+				"          Category as string,",
+				"          {Buying Group} as string,",
+				"          {Primary Contact} as string,",
+				"          {Postal Code} as string,",
+				"          {Valid From} as timestamp,",
+				"          {Valid To} as timestamp,",
+				"          {Lineage Key} as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     purgeFiles: true,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table',",
+				"     wildcardPaths:['SampleData/Emps/today/*.csv']) ~> Input",
+				"source(output(",
+				"          {Customer Key} as integer,",
+				"          {WWI Customer ID} as integer,",
+				"          Customer as string,",
+				"          Category as string,",
+				"          {Buying Group} as string,",
+				"          {Primary Contact} as string,",
+				"          {Postal Code} as string,",
+				"          {Valid From} as timestamp,",
+				"          {Valid To} as timestamp,",
+				"          {Lineage Key} as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> DimEmployees",
+				"NullFilter, select1 lookup(Input@{WWI Customer ID} == select1@{WWI Customer ID},",
+				"     multiple: true,",
+				"     broadcast: 'auto')~> LookupIDs",
+				"NormNames split(isNull(iscurrent),",
+				"     disjoint: false) ~> ConditionalSplit1@(NewRow, CheckForUpdates)",
+				"NameNorm2, DimEmployees exists(NameNorm2@EmpID == TypeConversions@EmpID,",
+				"     negate:false,",
+				"     broadcast: 'auto')~> checkForChanges",
+				"ConditionalSplit1@NewRow derive(iscurrent = 1,",
+				"          surrogatekey = toString(crc32(EmpID,EmpFunction))) ~> SetAttrsForNew",
+				"checkForChanges derive(iscurrent = 0) ~> SetAttrsInactive",
+				"checkForChanges derive(iscurrent = 1) ~> SetAttrsUpdate",
+				"LookupIDs select(mapColumn(",
+				"          {Customer Key} = Input@{Customer Key},",
+				"          {WWI Customer ID} = Input@{WWI Customer ID},",
+				"          Customer = Input@Customer,",
+				"          {Bill To Customer},",
+				"          Category,",
+				"          {Buying Group},",
+				"          {Primary Contact},",
+				"          {Postal Code},",
+				"          {Valid From} = Input@{Valid From},",
+				"          {Valid To} = Input@{Valid To},",
+				"          {Lineage Key} = Input@{Lineage Key},",
+				"          {Customer Key} = select1@{Customer Key},",
+				"          {WWI Customer ID} = select1@{WWI Customer ID},",
+				"          Customer = select1@Customer,",
+				"          {Valid From} = select1@{Valid From},",
+				"          {Valid To} = select1@{Valid To},",
+				"          {Lineage Key} = select1@{Lineage Key}",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> NormNames",
+				"SetAttrsInactive select(mapColumn(",
+				"          EmpID,",
+				"          Status,",
+				"          EndDate,",
+				"          iscurrent,",
+				"          processtime",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> InactiveFields",
+				"InactiveFields alterRow(updateIf(true())) ~> AlterRow1",
+				"Input filter(!isNull({WWI Customer ID})) ~> NullFilter",
+				"ConditionalSplit1@CheckForUpdates select(mapColumn(",
+				"          EmpID,",
+				"          Region,",
+				"          Status,",
+				"          Level,",
+				"          Role,",
+				"          StartDate,",
+				"          EndDate,",
+				"          EmpFunction,",
+				"          iscurrent,",
+				"          processtime,",
+				"          surrogatekey",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> NameNorm2",
+				"DimEmployees select(mapColumn(",
+				"          {Customer Key},",
+				"          {WWI Customer ID},",
+				"          Customer,",
+				"          {Valid From},",
+				"          {Valid To},",
+				"          {Lineage Key}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"SetAttrsForNew sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          EmpID as integer,",
+				"          surrogatekey as string,",
+				"          Region as string,",
+				"          Status as string,",
+				"          EmpFunction as string,",
+				"          Level as string,",
+				"          Role as string,",
+				"          StartDate as date,",
+				"          EndDate as date,",
+				"          iscurrent as integer,",
+				"          processtime as timestamp",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     batchSize: 50,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     partitionBy('roundRobin', 4)) ~> sinkNew",
+				"SetAttrsUpdate sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          EmpID as integer,",
+				"          surrogatekey as string,",
+				"          Region as string,",
+				"          Status as string,",
+				"          EmpFunction as string,",
+				"          Level as string,",
+				"          Role as string,",
+				"          StartDate as date,",
+				"          EndDate as date,",
+				"          iscurrent as integer,",
+				"          processtime as timestamp",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     batchSize: 50,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     partitionBy('roundRobin', 4)) ~> sinkUpdates",
+				"AlterRow1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          EmpID as integer,",
+				"          surrogatekey as string,",
+				"          Region as string,",
+				"          Status as string,",
+				"          EmpFunction as string,",
+				"          Level as string,",
+				"          Role as string,",
+				"          StartDate as date,",
+				"          EndDate as date,",
+				"          iscurrent as integer,",
+				"          processtime as timestamp",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:true,",
+				"     upsertable:false,",
+				"     keys:['EmpID'],",
+				"     format: 'table',",
+				"     batchSize: 50,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          EmpID,",
+				"          EndDate,",
+				"          iscurrent,",
+				"          processtime",
+				"     ),",
+				"     partitionBy('roundRobin', 4)) ~> sinkInactive"
+			]
+		}
+	}
+}
