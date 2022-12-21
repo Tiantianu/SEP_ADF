@@ -249,6 +249,8 @@
 				"     upsertable:false,",
 				"     format: 'table',",
 				"     batchSize: 50,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError',",
 				"     mapColumn(",
 				"          {Customer Key},",
@@ -258,7 +260,7 @@
 				"          {Valid To},",
 				"          {Lineage Key}",
 				"     ),",
-				"     partitionBy('roundRobin', 4)) ~> sinkInactive"
+				"     partitionBy('hash', 1)) ~> sinkInactive"
 			]
 		}
 	}
