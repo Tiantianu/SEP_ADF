@@ -37,14 +37,6 @@
 					},
 					"name": "sinkUpdates",
 					"description": " "
-				},
-				{
-					"dataset": {
-						"referenceName": "Dim_customer",
-						"type": "DatasetReference"
-					},
-					"name": "sinkInactive",
-					"description": " Age out old rows"
 				}
 			],
 			"transformations": [
@@ -228,39 +220,7 @@
 				"          {Valid To},",
 				"          {Lineage Key}",
 				"     ),",
-				"     partitionBy('roundRobin', 4)) ~> sinkUpdates",
-				"AlterRow1 sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     input(",
-				"          {Customer Key} as integer,",
-				"          {WWI Customer ID} as integer,",
-				"          Customer as string,",
-				"          Category as string,",
-				"          {Buying Group} as string,",
-				"          {Primary Contact} as string,",
-				"          {Postal Code} as string,",
-				"          {Valid From} as timestamp,",
-				"          {Valid To} as timestamp,",
-				"          {Lineage Key} as integer",
-				"     ),",
-				"     deletable:false,",
-				"     insertable:true,",
-				"     updateable:false,",
-				"     upsertable:false,",
-				"     format: 'table',",
-				"     batchSize: 50,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError',",
-				"     mapColumn(",
-				"          {Customer Key},",
-				"          {WWI Customer ID},",
-				"          Customer,",
-				"          {Valid From},",
-				"          {Valid To},",
-				"          {Lineage Key}",
-				"     ),",
-				"     partitionBy('hash', 1)) ~> sinkInactive"
+				"     partitionBy('roundRobin', 4)) ~> sinkUpdates"
 			]
 		}
 	}
