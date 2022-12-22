@@ -31,6 +31,15 @@
 		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"value": "https://septian.dfs.core.windows.net/"
+		},
+		"trigger1_properties_1_CopyPipeline_parameters_sourcetable": {
+			"value": "Table1"
+		},
+		"trigger1_properties_1_CopyPipeline_parameters_dbnamefrompl": {
+			"value": "TestDB"
+		},
+		"trigger1_properties_1_CopyPipeline_parameters_destinationtable": {
+			"value": "Table2"
 		}
 	}
 }

@@ -90,6 +90,14 @@
 					"referenceName": "AzureSqlDatabase3",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"tablename": {
+						"type": "string"
+					},
+					"dbnamefromdataset": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
 				"type": "AzureSqlTable",
 				"schema": [],
@@ -1110,15 +1118,9 @@
 								"partitionOption": "None"
 							},
 							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobStorageWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
-								}
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
 							},
 							"enableStaging": false,
 							"validateDataConsistency": false
@@ -1127,14 +1129,32 @@
 							{
 								"referenceName": "SourceDataset_b28",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"tablename": {
+										"value": "@pipeline().parameters.sourcetable",
+										"type": "Expression"
+									},
+									"dbnamefromdataset": {
+										"value": "@pipeline().parameters.dbnamefrompl",
+										"type": "Expression"
+									}
+								}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "DestinationDataset_b28",
+								"referenceName": "SourceDataset_b28",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"tablename": {
+										"value": "@pipeline().parameters.destinationtable",
+										"type": "Expression"
+									},
+									"dbnamefromdataset": {
+										"value": "@pipeline().parameters.dbnamefrompl",
+										"type": "Expression"
+									}
+								}
 							}
 						]
 					}
@@ -1142,6 +1162,17 @@
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
+				},
+				"parameters": {
+					"sourcetable": {
+						"type": "string"
+					},
+					"dbnamefrompl": {
+						"type": "string"
+					},
+					"destinationtable": {
+						"type": "string"
+					}
 				},
 				"annotations": []
 			},

@@ -42,6 +42,18 @@
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://septian.dfs.core.windows.net/"
+		},
+		"trigger1_properties_1_CopyPipeline_parameters_sourcetable": {
+			"type": "string",
+			"defaultValue": "Table1"
+		},
+		"trigger1_properties_1_CopyPipeline_parameters_dbnamefrompl": {
+			"type": "string",
+			"defaultValue": "TestDB"
+		},
+		"trigger1_properties_1_CopyPipeline_parameters_destinationtable": {
+			"type": "string",
+			"defaultValue": "Table2"
 		}
 	},
 	"variables": {
@@ -81,15 +93,9 @@
 								"partitionOption": "None"
 							},
 							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobStorageWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
-								}
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
 							},
 							"enableStaging": false,
 							"validateDataConsistency": false
@@ -98,14 +104,32 @@
 							{
 								"referenceName": "SourceDataset_b28",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"tablename": {
+										"value": "@pipeline().parameters.sourcetable",
+										"type": "Expression"
+									},
+									"dbnamefromdataset": {
+										"value": "@pipeline().parameters.dbnamefrompl",
+										"type": "Expression"
+									}
+								}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "DestinationDataset_b28",
+								"referenceName": "SourceDataset_b28",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"tablename": {
+										"value": "@pipeline().parameters.destinationtable",
+										"type": "Expression"
+									},
+									"dbnamefromdataset": {
+										"value": "@pipeline().parameters.dbnamefrompl",
+										"type": "Expression"
+									}
+								}
 							}
 						]
 					}
@@ -114,11 +138,21 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"parameters": {
+					"sourcetable": {
+						"type": "string"
+					},
+					"dbnamefrompl": {
+						"type": "string"
+					},
+					"destinationtable": {
+						"type": "string"
+					}
+				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SourceDataset_b28')]",
-				"[concat(variables('factoryId'), '/datasets/DestinationDataset_b28')]"
+				"[concat(variables('factoryId'), '/datasets/SourceDataset_b28')]"
 			]
 		},
 		{
@@ -1095,6 +1129,14 @@
 				"linkedServiceName": {
 					"referenceName": "AzureSqlDatabase3",
 					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"tablename": {
+						"type": "string"
+					},
+					"dbnamefromdataset": {
+						"type": "string"
+					}
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
@@ -2841,6 +2883,40 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/Input_customer')]",
 				"[concat(variables('factoryId'), '/datasets/Dim_customer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/trigger1')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "1_CopyPipeline",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"sourcetable": "[parameters('trigger1_properties_1_CopyPipeline_parameters_sourcetable')]",
+							"dbnamefrompl": "[parameters('trigger1_properties_1_CopyPipeline_parameters_dbnamefrompl')]",
+							"destinationtable": "[parameters('trigger1_properties_1_CopyPipeline_parameters_destinationtable')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Minute",
+						"interval": 15,
+						"startTime": "2022-12-22T18:29:00Z",
+						"timeZone": "UTC"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/1_CopyPipeline')]"
 			]
 		}
 	]

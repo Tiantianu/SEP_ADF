@@ -43,6 +43,18 @@
 			"type": "string",
 			"defaultValue": "https://septian.dfs.core.windows.net/"
 		},
+		"trigger1_properties_1_CopyPipeline_parameters_sourcetable": {
+			"type": "string",
+			"defaultValue": "Table1"
+		},
+		"trigger1_properties_1_CopyPipeline_parameters_dbnamefrompl": {
+			"type": "string",
+			"defaultValue": "TestDB"
+		},
+		"trigger1_properties_1_CopyPipeline_parameters_destinationtable": {
+			"type": "string",
+			"defaultValue": "Table2"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -134,6 +146,15 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"trigger1_properties_1_CopyPipeline_parameters_sourcetable": {
+						"value": "[parameters('trigger1_properties_1_CopyPipeline_parameters_sourcetable')]"
+					},
+					"trigger1_properties_1_CopyPipeline_parameters_dbnamefrompl": {
+						"value": "[parameters('trigger1_properties_1_CopyPipeline_parameters_dbnamefrompl')]"
+					},
+					"trigger1_properties_1_CopyPipeline_parameters_destinationtable": {
+						"value": "[parameters('trigger1_properties_1_CopyPipeline_parameters_destinationtable')]"
 					}
 				}
 			},

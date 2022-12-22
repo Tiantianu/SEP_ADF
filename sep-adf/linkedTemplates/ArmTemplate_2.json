@@ -6,6 +6,18 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "sep-adf"
+		},
+		"trigger1_properties_1_CopyPipeline_parameters_sourcetable": {
+			"type": "string",
+			"defaultValue": "Table1"
+		},
+		"trigger1_properties_1_CopyPipeline_parameters_dbnamefrompl": {
+			"type": "string",
+			"defaultValue": "TestDB"
+		},
+		"trigger1_properties_1_CopyPipeline_parameters_destinationtable": {
+			"type": "string",
+			"defaultValue": "Table2"
 		}
 	},
 	"variables": {
@@ -224,6 +236,38 @@
 					"cancelAfter": {}
 				},
 				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/trigger1')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "1_CopyPipeline",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"sourcetable": "[parameters('trigger1_properties_1_CopyPipeline_parameters_sourcetable')]",
+							"dbnamefrompl": "[parameters('trigger1_properties_1_CopyPipeline_parameters_dbnamefrompl')]",
+							"destinationtable": "[parameters('trigger1_properties_1_CopyPipeline_parameters_destinationtable')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Minute",
+						"interval": 15,
+						"startTime": "2022-12-22T18:29:00Z",
+						"timeZone": "UTC"
+					}
+				}
 			},
 			"dependsOn": []
 		}
