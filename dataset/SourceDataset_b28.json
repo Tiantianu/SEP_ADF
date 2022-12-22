@@ -5,6 +5,14 @@
 			"referenceName": "AzureSqlDatabase3",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"tablename": {
+				"type": "string"
+			},
+			"dbnamefromdataset": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [],
