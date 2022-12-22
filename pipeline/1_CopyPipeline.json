@@ -29,15 +29,9 @@
 						"partitionOption": "None"
 					},
 					"sink": {
-						"type": "DelimitedTextSink",
-						"storeSettings": {
-							"type": "AzureBlobStorageWriteSettings"
-						},
-						"formatSettings": {
-							"type": "DelimitedTextWriteSettings",
-							"quoteAllText": true,
-							"fileExtension": ".txt"
-						}
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
 					},
 					"enableStaging": false,
 					"validateDataConsistency": false
@@ -45,17 +39,33 @@
 				"inputs": [
 					{
 						"referenceName": "SourceDataset_b28",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"tablename": "Table1",
+							"dbnamefromdataset": "TestDB"
+						}
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "DestinationDataset_b28",
-						"type": "DatasetReference"
+						"referenceName": "SourceDataset_b28",
+						"type": "DatasetReference",
+						"parameters": {
+							"tablename": "Table2",
+							"dbnamefromdataset": "TestDB"
+						}
 					}
 				]
 			}
 		],
+		"parameters": {
+			"tablenamefrompl": {
+				"type": "string"
+			},
+			"dbnamefrompl": {
+				"type": "string"
+			}
+		},
 		"annotations": []
 	}
 }
