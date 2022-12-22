@@ -1,0 +1,29 @@
+{
+	"name": "trigger1",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "1_CopyPipeline",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"sourcetable": "Table1",
+					"dbnamefrompl": "TestDB",
+					"destinationtable": "Table2"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 15,
+				"startTime": "2022-12-22T18:29:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}

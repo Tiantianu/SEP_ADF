@@ -41,8 +41,14 @@
 						"referenceName": "SourceDataset_b28",
 						"type": "DatasetReference",
 						"parameters": {
-							"tablename": "Table1",
-							"dbnamefromdataset": "TestDB"
+							"tablename": {
+								"value": "@pipeline().parameters.sourcetable",
+								"type": "Expression"
+							},
+							"dbnamefromdataset": {
+								"value": "@pipeline().parameters.dbnamefrompl",
+								"type": "Expression"
+							}
 						}
 					}
 				],
@@ -51,18 +57,27 @@
 						"referenceName": "SourceDataset_b28",
 						"type": "DatasetReference",
 						"parameters": {
-							"tablename": "Table2",
-							"dbnamefromdataset": "TestDB"
+							"tablename": {
+								"value": "@pipeline().parameters.destinationtable",
+								"type": "Expression"
+							},
+							"dbnamefromdataset": {
+								"value": "@pipeline().parameters.dbnamefrompl",
+								"type": "Expression"
+							}
 						}
 					}
 				]
 			}
 		],
 		"parameters": {
-			"tablenamefrompl": {
+			"sourcetable": {
 				"type": "string"
 			},
 			"dbnamefrompl": {
+				"type": "string"
+			},
+			"destinationtable": {
 				"type": "string"
 			}
 		},
